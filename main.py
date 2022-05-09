@@ -169,7 +169,6 @@ class Pokedex:
                             id_layer = id_layer.json()
                         find_id = id_layer['id']
                         self.bad_pokemon.append(find_id)
-                        print(f'an error occured with {url_bottom_layer}')
                         continue
         if self.bad_pokemon != []:
             my_pokedex.edgecase_grabs()
