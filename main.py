@@ -12,7 +12,9 @@ class Pokedex:
            
     #This is the function that searches for all types of a specific pokemon
     def type_Pokemon(self):
-        my_type = input("What type of pokemon would you like to look for?: An example would be 'grass' ")
+        my_type = input("What type of pokemon would you like to look for?: An example would be 'grass'\nYou can also type 'quit' to quit ")
+        if my_type == 'quit':
+            my_pokedex.Screen()
         #my_region = input("And is there a region you want to search in? If not, type 'no': ")
         my_pokemon = r.get('https://pokeapi.co/api/v2/pokemon/?offset=0&limit=898')        
         if my_pokemon.status_code == 200:
@@ -32,7 +34,7 @@ class Pokedex:
     #This is what searches for a pokemon and adds it to your revealed Pokemon
     def search_Pokemon(self):
         while True:
-            find = input('What pokemon would you like to add?\n')
+            find = input('What pokemon would you like to add?\n').lower()
             name = find
             data = r.get(f'https://pokeapi.co/api/v2/pokemon/{find}')
             if data.status_code == 200:
@@ -67,7 +69,7 @@ class Pokedex:
             if ind_abilities == 'done':
                 break
             my_abilities.append(ind_abilities)        
-        my_pokemon = Pokemon(my_name, my_types, my_height, my_weight, my_base_experience, my_id, my_abilities)
+        my_pokemon = MyPokemon(my_name, my_types, my_height, my_weight, my_base_experience, my_id, my_abilities)
         self.revealed_pokemon.append(my_pokemon)
         my_pokedex.Screen()
             
@@ -127,6 +129,9 @@ class Pokedex:
             my_pokedex.type_Pokemon()
         elif direction == 'region':
             my_pokedex.Region()
+        else:
+            print("Sorry, we don't recoginize that command. How about we try this again?")
+            my_pokedex.Screen()
    
 
     def edgecase_grabs(self):
@@ -184,11 +189,15 @@ class Pokemon:
         self.ident = data['id']
         self.abilities = [v['ability']['name'] for v in data['abilities']]
 
-
-    def __getitem__(self,key):
-        return self.__dict__[key]
-        
-        
+class MyPokemon:
+    def __init__(self, name, types, height, weight, base_experience, ident, abilities):
+        self.name = name
+        self.types = types
+        self.height = height
+        self.weight = weight
+        self.base_experience = base_experience
+        self.ident = ident
+        self.abilities =  abilities  
         
 my_pokedex = Pokedex()
 my_pokedex.Screen()
